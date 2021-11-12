@@ -14,7 +14,8 @@ pygame.init()
 #Variables
 width = 720
 height = 720
-playerSpeed = 0.4
+
+clock = pygame.time.Clock()
 
 #Images
 startArea = pygame.image.load("Images/Start Area.png")
@@ -40,6 +41,7 @@ def main():
         
         
         #Refresh
+        clock.tick(60)
         pygame.display.update()
     
 
