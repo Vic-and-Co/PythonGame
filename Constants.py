@@ -1,1 +1,6 @@
-PLAYER_SPEED = 0.4
+'''
+Self explanitory
+'''
+
+PLAYER_SPEED = 0.3
+HITBOX_OFFSET = 13
