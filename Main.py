@@ -48,8 +48,8 @@ def main():
             
             
         #Controls
-        controls.moveX()
-        controls.moveY()
+        controls.playerMovement()
+        
         if (keyboard.is_pressed('shift')):
             character = pygame.image.load("Images/characterFocus.png")
         else:
