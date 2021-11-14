@@ -17,6 +17,7 @@ class Player:
         self.playerHp = 3 #What health we player starts at
         self.playerHearts = pygame.image.load("Images/h3.png")
         self.appearence = pygame.image.load("Images/character.png")
+        self.swordHitZone = (self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)
         
     def playerMovement(self):
         def moveRight(self):
@@ -58,9 +59,9 @@ class Player:
         
     def focusModeOn(self):
         if (keyboard.is_pressed('shift')):
-            self.character = pygame.image.load("Images/characterFocus.png")
+            self.appearence = pygame.image.load("Images/characterFocus.png")
         else:
-            self.character = pygame.image.load("Images/character.png")
+            self.appearence = pygame.image.load("Images/character.png")
         
         
     def addHealth(self):
@@ -88,3 +89,7 @@ class Player:
     def characterHitBoxDraw(self):
         self.hitbox = (self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
         self.playerRect = pygame.Rect(self.hitbox)
+        
+        #Sword HitZone Draw
+        self.appearence = pygame.image.load("Images/character.png")
+        self.swordHitZone = pygame.Rect(self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)

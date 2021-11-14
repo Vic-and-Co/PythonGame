@@ -26,6 +26,16 @@ class MeleeType:
         elif (self.eY < playerY):
             self.eY  += (MELEE_E_SPEED * FPS_CAP)
             
+    def isPlayerAttack(self, swordHitZone):
+        if (pygame.Rect.colliderect(self.hitbox, swordHitZone) and self.hitbox.collidepoint(pygame.mouse.get_pos()) and swordHitZone.collidepoint(pygame.mouse.get_pos())):
+            m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
+            if (m1Press):
+                print("attacked!")
+        
+            
     def characterHitBoxUpdate(self):
-        self.rectX = self.eX + int(self.appearence.get_width())
-        self.rectY = self.eY + int(self.appearence.get_height())
+        self.rectX = 72
+        self.rectY = 8
+        self.hitbox = pygame.Rect(self.eX, self.eY, self.rectX, self.rectY)
+        
+    

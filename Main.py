@@ -56,13 +56,21 @@ def main():
         
         #Refresh    
         screen.blit(startArea, (0, 0))
-        pygame.draw.circle(screen, (255, 0 ,0), (gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y), 40) #Will change location
+        pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Will change location, draws red character hitbox
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
         screen.blit(dummy.appearence, (dummy.eX, dummy.eY))
         gamer.characterHitBoxDraw()
         dummy.characterHitBoxUpdate()
         
-        meleeSwordHBDraw()
+        pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
+        
+        dummy.isPlayerAttack(gamer.swordHitZone)
+        
+        meleeSwordDraw()
+        
+        # if pygame.Rect.colliderect(dummy.hitbox, gamer.swordHitZone):
+        #     print(True)
+        #     exit()
         
              #These need to be at the end of draw since they're at the top
         if (keyboard.is_pressed('tab') and (area == 0)):
@@ -86,7 +94,7 @@ def playerWantClose():
         print("closing")
         exit()
 
-def meleeSwordHBDraw():
+def meleeSwordDraw():
     global angle
     swordX, swordY = gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y
     angle += 20
@@ -96,6 +104,3 @@ def meleeSwordHBDraw():
     #screen.blit(sword, (gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y, 2, 30))
     swordRotation = pygame.transform.rotate(sword, angle)
     screen.blit(swordRotation, (swordX - int(swordRotation.get_width() / 2), swordY - int(swordRotation.get_height() / 2)))
-
-if __name__ == "__main__":
-    main()
