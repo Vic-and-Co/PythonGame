@@ -4,6 +4,7 @@ Create classes for enemies here
 #Imports
 from Constants import *
 from PlayerClass import *
+from Data import *
 
 gamer = Player()
 
@@ -26,13 +27,14 @@ class MeleeType:
         elif (self.eY < playerY):
             self.eY  += (MELEE_E_SPEED * FPS_CAP)
             
-    def isPlayerAttack(self, swordHitZone):
+    def isPlayerAttack(self, swordHitZone, attackAllowed):
         if (pygame.Rect.colliderect(self.hitbox, swordHitZone) and self.hitbox.collidepoint(pygame.mouse.get_pos()) and swordHitZone.collidepoint(pygame.mouse.get_pos())):
             m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
-            if (m1Press):
+            if (m1Press and attackAllowed):
                 print("attacked!")
-        
+                exit()
             
+
     def characterHitBoxUpdate(self):
         self.rectX = 72
         self.rectY = 8

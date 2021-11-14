@@ -19,6 +19,13 @@ class Player:
         self.appearence = pygame.image.load("Images/character.png")
         self.swordHitZone = (self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)
         
+        #Attack bar
+        self.allowedBarY = 180
+        self.allowedBarGoingDown = True
+        self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30) #No clue what to call this, its the thing that moves up and down, dictating if you can attack
+        self.attackAllowedZone = pygame.Rect(750, 360, 59, 135)
+        self.attackAllowed = False
+        
     def playerMovement(self):
         def moveRight(self):
             if ((keyboard.is_pressed('right') or keyboard.is_pressed('d')) and self.playerX < 690.5):
@@ -84,6 +91,28 @@ class Player:
             
         elif (self.playerHp == 0):
             self.playerHearts = pygame.image.load("Images/blank.png")
+            
+    def allowedBarMovement(self):
+        if ((self.allowedBarY < 645) and self.allowedBarGoingDown):
+            self.allowedBarY += (PLAYER_HITBAR_SPEED * FPS_CAP)
+            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30)
+            
+            if self.allowedBarY > 644:
+                self.allowedBarGoingDown = False
+            
+        elif ((self.allowedBarY > 180) and not self.allowedBarGoingDown):
+            self.allowedBarY -= (PLAYER_HITBAR_SPEED * FPS_CAP)
+            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30)
+            
+            if self.allowedBarY < 181:
+                self.allowedBarGoingDown = True
+    
+    def allowedToAttack(self):
+        if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
+            self.attackAllowed = True
+            print("attack allowed")
+        else:
+            self.attackAllowed = False
             
             
     def characterHitBoxDraw(self):

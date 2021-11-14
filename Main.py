@@ -46,6 +46,7 @@ def main():
         #Controls
         gamer.playerMovement()
         gamer.focusModeOn()
+        #print(pygame.mouse.get_pos())
         
         #Meeeenu
         screen.blit(menu, (0, 0))
@@ -64,9 +65,10 @@ def main():
         
         pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
         
-        dummy.isPlayerAttack(gamer.swordHitZone)
+        dummy.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
         
         meleeSwordDraw()
+        
         
         # if pygame.Rect.colliderect(dummy.hitbox, gamer.swordHitZone):
         #     print(True)
@@ -82,6 +84,10 @@ def main():
         gamer.drawHealth()
         screen.blit(sideScreen, (0, 0))
         screen.blit(gamer.playerHearts, (0, 0))
+        pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedBar), 2)
+        pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
+        gamer.allowedBarMovement()
+        gamer.allowedToAttack()
         
         
         clock.tick(60)
@@ -104,3 +110,4 @@ def meleeSwordDraw():
     #screen.blit(sword, (gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y, 2, 30))
     swordRotation = pygame.transform.rotate(sword, angle)
     screen.blit(swordRotation, (swordX - int(swordRotation.get_width() / 2), swordY - int(swordRotation.get_height() / 2)))
+    
