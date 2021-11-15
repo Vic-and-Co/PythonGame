@@ -93,6 +93,7 @@ def main():
         clock.tick(60)
         pygame.event.wait(1)
         pygame.display.update()
+        pygame.display.flip()
     
 #Other Functions
 def playerWantClose():
