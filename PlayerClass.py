@@ -95,14 +95,14 @@ class Player:
     def allowedBarMovement(self):
         if ((self.allowedBarY < 645) and self.allowedBarGoingDown):
             self.allowedBarY += (PLAYER_HITBAR_SPEED * FPS_CAP)
-            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30)
+            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 60, 30)
             
             if self.allowedBarY > 644:
                 self.allowedBarGoingDown = False
             
         elif ((self.allowedBarY > 180) and not self.allowedBarGoingDown):
             self.allowedBarY -= (PLAYER_HITBAR_SPEED * FPS_CAP)
-            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30)
+            self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 60, 30)
             
             if self.allowedBarY < 181:
                 self.allowedBarGoingDown = True

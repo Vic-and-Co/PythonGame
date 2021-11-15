@@ -84,8 +84,8 @@ def main():
         gamer.drawHealth()
         screen.blit(sideScreen, (0, 0))
         screen.blit(gamer.playerHearts, (0, 0))
-        pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedBar), 2)
-        pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
+        pygame.draw.rect(screen,(255, 255, 255), (gamer.attackAllowedBar))
+        #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
         gamer.allowedBarMovement()
         gamer.allowedToAttack()
         
