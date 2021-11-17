@@ -28,7 +28,6 @@ screen = pygame.display.set_mode((width, height))
 clock = pygame.time.Clock()
 
 #Images
-startArea = pygame.image.load("Images/Start Area.png")
 menu = pygame.image.load("Images/menu.png")
 sideScreen = pygame.image.load("Images/sideScreen.png")
 sword = pygame.image.load("Images/sword.png")
@@ -48,7 +47,17 @@ def main():
         gamer.focusModeOn()
         #print(pygame.mouse.get_pos())
         
-        stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        worldChangeVar = stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        if worldChangeVar == "bot":
+            gamer.playerY = 630
+        elif worldChangeVar == "top":
+            gamer.playerY = 60
+        elif worldChangeVar == "left":
+            gamer.playerX = 60
+        elif worldChangeVar == "right":
+            gamer.playerX = 620
+        stage.worldImage()
+            
         print(stage.area)
         
         #Meeeenu
@@ -59,7 +68,7 @@ def main():
         dummy.goTowardsPlayerY(gamer.playerY)
         
         #Refresh    
-        screen.blit(startArea, (0, 0))
+        screen.blit(stage.appearence, (0, 0))
         pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Will change location, draws red character hitbox
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
         screen.blit(dummy.appearence, (dummy.eX, dummy.eY))
@@ -67,7 +76,11 @@ def main():
         dummy.characterHitBoxUpdate()
         
         pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
+        
         pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
+        pygame.draw.rect(screen, (255, 0, 0), stage.downSquare, 2)
+        pygame.draw.rect(screen, (255, 0, 0), stage.leftSquare, 2)
+        pygame.draw.rect(screen, (255, 0, 0), stage.rightSquare, 2)
         
         dummy.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
         
