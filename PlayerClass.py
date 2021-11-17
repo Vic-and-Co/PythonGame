@@ -18,6 +18,7 @@ class Player:
         self.playerHearts = pygame.image.load("Images/h3.png")
         self.appearence = pygame.image.load("Images/character.png")
         self.swordHitZone = (self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)
+        self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
         
         #Attack bar
         self.allowedBarY = 180
@@ -116,7 +117,7 @@ class Player:
             
             
     def characterHitBoxDraw(self):
-        self.hitbox = (self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
+        self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
         self.playerRect = pygame.Rect(self.hitbox)
         
         #Sword HitZone Draw

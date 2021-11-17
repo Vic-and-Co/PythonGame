@@ -31,7 +31,7 @@ class MeleeType:
         if (pygame.Rect.colliderect(self.hitbox, swordHitZone) and self.hitbox.collidepoint(pygame.mouse.get_pos()) and swordHitZone.collidepoint(pygame.mouse.get_pos())):
             m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
             if (m1Press and attackAllowed):
-                print("attacked!")
+                #print("attacked!")
                 exit()
             
 

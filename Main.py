@@ -10,6 +10,7 @@ from time import sleep, time
 
 from PlayerClass import *
 from EnemyFile import *
+from  TheWorld import *
 
 #Bruh
 pygame.init()
@@ -17,14 +18,13 @@ pygame.init()
 #Variables
 gamer = Player()
 dummy = MeleeType(700, 200)
+stage = World(0)
 
 angle = 1
 
 width = 1080
 height = 720
 screen = pygame.display.set_mode((width, height))
-area = 0 #0 refers to start area, other numbers correspond to their respective stages
-
 clock = pygame.time.Clock()
 
 #Images
@@ -48,6 +48,9 @@ def main():
         gamer.focusModeOn()
         #print(pygame.mouse.get_pos())
         
+        stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        print(stage.area)
+        
         #Meeeenu
         screen.blit(menu, (0, 0))
         
@@ -64,6 +67,7 @@ def main():
         dummy.characterHitBoxUpdate()
         
         pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
+        pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
         
         dummy.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
         
@@ -75,7 +79,7 @@ def main():
         #     exit()
         
              #These need to be at the end of draw since they're at the top
-        if (keyboard.is_pressed('tab') and (area == 0)):
+        if (keyboard.is_pressed('tab') and (stage.area == 0)):
             screen.blit(menu, (0, 0))
             menuOpen = True
         else:
