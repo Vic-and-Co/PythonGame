@@ -5,7 +5,6 @@ Where the game is run
 #Imports
 import pygame
 import keyboard
-import mouse
 from time import sleep, time
 
 from PlayerClass import *
@@ -17,7 +16,6 @@ pygame.init()
 
 #Variables
 gamer = Player()
-dummy = MeleeType(700, 200)
 stage = World(0)
 
 angle = 1
@@ -63,26 +61,19 @@ def main():
         #Meeeenu
         screen.blit(menu, (0, 0))
         
-        #Dumb Eggies' Movement
-        dummy.goTowardsPlayerX(gamer.playerX)
-        dummy.goTowardsPlayerY(gamer.playerY)
         
         #Refresh    
         screen.blit(stage.appearence, (0, 0))
-        pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Will change location, draws red character hitbox
+        #pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
-        screen.blit(dummy.appearence, (dummy.eX, dummy.eY))
         gamer.characterHitBoxDraw()
-        dummy.characterHitBoxUpdate()
         
-        pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
         
         # pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
         # pygame.draw.rect(screen, (255, 0, 0), stage.downSquare, 2)
         # pygame.draw.rect(screen, (255, 0, 0), stage.leftSquare, 2)
         # pygame.draw.rect(screen, (255, 0, 0), stage.rightSquare, 2)
         
-        dummy.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
         
         meleeSwordDraw()
         
