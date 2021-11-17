@@ -77,10 +77,10 @@ def main():
         
         pygame.draw.rect(screen,(255, 0, 0), (dummy.eX, dummy.eY, dummy.rectX, dummy.rectY), 2)
         
-        pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
-        pygame.draw.rect(screen, (255, 0, 0), stage.downSquare, 2)
-        pygame.draw.rect(screen, (255, 0, 0), stage.leftSquare, 2)
-        pygame.draw.rect(screen, (255, 0, 0), stage.rightSquare, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), stage.downSquare, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), stage.leftSquare, 2)
+        # pygame.draw.rect(screen, (255, 0, 0), stage.rightSquare, 2)
         
         dummy.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
         
