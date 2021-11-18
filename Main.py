@@ -47,16 +47,6 @@ def main():
         gamer.focusModeOn()
         #print(pygame.mouse.get_pos())
         
-        # worldChangeVar = stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
-        # if worldChangeVar == "bot":
-        #     gamer.playerY = 630
-        # elif worldChangeVar == "top":
-        #     gamer.playerY = 60
-        # elif worldChangeVar == "left":
-        #     gamer.playerX = 60
-        # elif worldChangeVar == "right":
-        #     gamer.playerX = 620
-        # stage.worldImage()
         print(stage.area)
             
         #print(stage.area)
