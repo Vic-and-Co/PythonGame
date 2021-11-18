@@ -134,7 +134,7 @@ class Player:
         m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
         self.atkCoolDown()
         if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
-            print(self.attackCoolDown)
+            #print(self.attackCoolDown)
             if (m1Press and self.attackCoolDown == 0):
                 self.attackCoolDown = 1
                 self.attackAllowed = True
