@@ -6,6 +6,7 @@ Where the game is run
 import pygame
 import keyboard
 from time import sleep, time
+import random
 
 from PlayerClass import *
 from EnemyFile import *
@@ -24,7 +25,6 @@ width = 1080
 height = 720
 
 screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("NIGHTMARE NIGHTMARE NIGHTMARE")
 clock = pygame.time.Clock()
 
 #Images
@@ -38,6 +38,8 @@ def main():
     gameRunning = True
     playerWantClose()
     
+    pygame.display.set_caption(randomName())
+    
     while gameRunning:
         #keep at top of gameRunning
         playerWantClose()
@@ -47,7 +49,7 @@ def main():
         gamer.focusModeOn()
         #print(pygame.mouse.get_pos())
         
-        print(stage.area)
+        #print(stage.area)
             
         #print(stage.area)
         gamer.subHealth()
@@ -106,3 +108,28 @@ def playerWantClose():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
+            
+def randomName():
+    titleNum = random.randint(1,11)
+    if titleNum == 1:
+        return "NIGHTMARE NIGHTMARE NIGHTMARE"
+    elif titleNum == 2:
+        return "Epic rpg bossfight simulator"
+    elif titleNum == 3:
+        return "run, now"
+    elif titleNum == 4:
+        return "Sponsered by pain"
+    elif titleNum == 5:
+        return "The Older Writings"
+    elif titleNum == 6:
+        return "Game Child"
+    elif titleNum == 7:
+        return "Made in Chinor"
+    elif titleNum == 8:
+        return "Chewing Chum"
+    elif titleNum == 9:
+        return "Xx_EPIC_GAMER_2440_xX"
+    elif titleNum == 10:
+        return "Strohm Bot 2000.exe VER.3 (In Progress)"
+    elif titleNum == 11:
+        return "Top 10 Greatest"

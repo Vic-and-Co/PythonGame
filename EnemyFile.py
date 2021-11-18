@@ -14,6 +14,7 @@ class MeleeType:
         self.speed = MELEE_E_SPEED
         self.appearence = pygame.image.load("Images/MeleeEnemy.jpg")
         self.health = 3
+        self.damageCoolDown = 0
         
     def goTowardsPlayerX(self, playerX):
         if (self.eX > playerX):
@@ -32,13 +33,21 @@ class MeleeType:
             if (playerAttack):
                 exit()
     
+    def dmgCoolDown(self):
+        if self.damageCoolDown >= 30:
+            self.damageCoolDown = 0
+        elif self.damageCoolDown > 0:
+            self.damageCoolDown += 0.05 * FPS_CAP
+    
     def addHealth(self):
         if (self.health < 3):
             self.health += 1
     
     def subHealth(self):
-        if (self.health > 0):
+        self.dmgCoolDown()
+        if (self.health > 0 and self.damageCoolDown == 0):
             self.health -= 1
+            self.damageCoolDown = 1
     
     def checkHealth(self):
         if self.health == 3:
