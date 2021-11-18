@@ -22,7 +22,9 @@ angle = 1
 
 width = 1080
 height = 720
+
 screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("NIGHTMARE NIGHTMARE NIGHTMARE")
 clock = pygame.time.Clock()
 
 #Images
@@ -56,31 +58,33 @@ def main():
             gamer.playerX = 620
         stage.worldImage()
             
-        print(stage.area)
+        #print(stage.area)
+        gamer.subHealth()
         
         #Meeeenu
         screen.blit(menu, (0, 0))
         
         
         #Refresh    
+        worldChangeVar = stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        if worldChangeVar == "bot":
+            gamer.playerY = 630
+        elif worldChangeVar == "top":
+            gamer.playerY = 60
+        elif worldChangeVar == "left":
+            gamer.playerX = 60
+        elif worldChangeVar == "right":
+            gamer.playerX = 620
+        stage.worldImage()
         screen.blit(stage.appearence, (0, 0))
+        
         #pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
         gamer.characterHitBoxDraw()
+        if gamer.attackCoolDown != 0:
+            gamer.meleeSwordDraw()
+            screen.blit(gamer.swordRotation, (gamer.swordRotsX, gamer.swordRotsY))
         
-        
-        # pygame.draw.rect(screen, (255, 0, 0), stage.upSquare, 2)
-        # pygame.draw.rect(screen, (255, 0, 0), stage.downSquare, 2)
-        # pygame.draw.rect(screen, (255, 0, 0), stage.leftSquare, 2)
-        # pygame.draw.rect(screen, (255, 0, 0), stage.rightSquare, 2)
-        
-        
-        meleeSwordDraw()
-        
-        
-        # if pygame.Rect.colliderect(dummy.hitbox, gamer.swordHitZone):
-        #     print(True)
-        #     exit()
         
              #These need to be at the end of draw since they're at the top
         if (keyboard.is_pressed('tab') and (stage.area == 0)):
@@ -95,7 +99,7 @@ def main():
         pygame.draw.rect(screen,(255, 255, 255), (gamer.attackAllowedBar))
         #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
         gamer.allowedBarMovement()
-        gamer.allowedToAttack()
+        gamer.playerAttack()
         
         
         clock.tick(60)
@@ -108,15 +112,6 @@ def playerWantClose():
     if (keyboard.is_pressed('esc')):
         print("closing")
         exit()
-
-def meleeSwordDraw():
-    global angle
-    swordX, swordY = gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y
-    angle += 20
-    # swordHB = (gamer.playerX + SWORD_OFFSET, gamer.playerY + SWORD_OFFSET, 2, 30)
-    # swordRect = pygame.Rect(swordHB)
-    # pygame.draw.rect(screen, (255, 0, 0), swordRect)
-    #screen.blit(sword, (gamer.playerX + SWORD_OFFSET_X, gamer.playerY + SWORD_OFFSET_Y, 2, 30))
-    swordRotation = pygame.transform.rotate(sword, angle)
-    screen.blit(swordRotation, (swordX - int(swordRotation.get_width() / 2), swordY - int(swordRotation.get_height() / 2)))
-    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            exit()

@@ -19,6 +19,8 @@ class Player:
         self.appearence = pygame.image.load("Images/character.png")
         self.swordHitZone = (self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)
         self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
+        self.damageCoolDown = 0
+        self.attackCoolDown = 0
         
         #Attack bar
         self.allowedBarY = 180
@@ -26,6 +28,12 @@ class Player:
         self.attackAllowedBar = pygame.Rect(750, self.allowedBarY, 59, 30) #No clue what to call this, its the thing that moves up and down, dictating if you can attack
         self.attackAllowedZone = pygame.Rect(750, 360, 59, 135)
         self.attackAllowed = False
+        
+        #Super
+        self.angle = 1
+        self.sword = pygame.image.load("Images/sword.png")
+        self.swordX = 0
+        self.swordY = 0
         
     def playerMovement(self):
         def moveRight(self):
@@ -72,13 +80,27 @@ class Player:
             self.appearence = pygame.image.load("Images/character.png")
         
         
+    def dmgCoolDown(self):
+        if self.damageCoolDown >= 30:
+            self.damageCoolDown = 0
+        elif self.damageCoolDown > 0:
+            self.damageCoolDown += 0.05 * FPS_CAP
+    
+    def atkCoolDown(self):
+        if self.attackCoolDown >= 30:
+            self.attackCoolDown = 0
+        elif self.attackCoolDown > 0:
+            self.attackCoolDown += 0.05 * FPS_CAP
+        
     def addHealth(self):
         if (self.playerHp < 3):
             self.playerHp += 1
         
     def subHealth(self):
-        if (self.playerHp > 0):
+        self.dmgCoolDown()
+        if (self.playerHp > 0 and self.damageCoolDown == 0):
             self.playerHp -= 1
+            self.damageCoolDown = 1
     
     def drawHealth(self):
         if (self.playerHp == 3):
@@ -108,13 +130,26 @@ class Player:
             if self.allowedBarY < 181:
                 self.allowedBarGoingDown = True
     
-    def allowedToAttack(self):
+    def playerAttack(self):
+        m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
+        self.atkCoolDown()
         if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
-            self.attackAllowed = True
-            print("attack allowed")
+            print(self.attackCoolDown)
+            if (m1Press and self.attackCoolDown == 0):
+                self.attackCoolDown = 1
+                self.attackAllowed = True
+                return True
         else:
             self.attackAllowed = False
-            
+            return False
+    
+    def meleeSwordDraw(self):
+        self.swordX, self.swordY = self.playerX + SWORD_OFFSET_X, self.playerY + SWORD_OFFSET_Y
+        self.angle -= 20
+        self.swordRotation = pygame.transform.rotate(self.sword, self.angle)
+        #screen.blit(swordRotation, (swordX - int(swordRotation.get_width() / 2), swordY - int(swordRotation.get_height() / 2)))
+        self.swordRotsX = self.swordX - int(self.swordRotation.get_width() / 2)
+        self.swordRotsY = self.swordY - int(self.swordRotation.get_height() / 2)
             
     def characterHitBoxDraw(self):
         self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)

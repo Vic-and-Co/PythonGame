@@ -2,6 +2,7 @@
 The world class: dictates the stages/ areas
 '''
 import pygame
+from Constants import *
 
 class World:
     def __init__(self, area):
@@ -15,6 +16,8 @@ class World:
         self.leftSquare = pygame.Rect(0, 255, 30, 209)
         self.rightSquare = pygame.Rect(690, 255, 30, 209)
         
+        self.changeCoolDown = 0
+        
     def worldChange(self, playerHitBox, playerX, playerY):
         if pygame.Rect.colliderect(self.upSquare, playerHitBox) and self.area == 0:
             self.area = 2
@@ -24,7 +27,8 @@ class World:
             self.area = 0
             return "top"
         
-        if pygame.Rect.colliderect(self.rightSquare, playerHitBox):
+        if pygame.Rect.colliderect(self.rightSquare, playerHitBox) and self.changeCoolDown == 0:
+            self.wrldChangeCoolDown()
             if self.area == 0:
                 self.area = 3
                 return "left"
@@ -33,6 +37,7 @@ class World:
                 return "left"
                 
         if pygame.Rect.colliderect(self.leftSquare, playerHitBox):
+            self.wrldChangeCoolDown()
             if self.area == 0:
                 self.area = 1
                 return "right"
@@ -49,3 +54,9 @@ class World:
             self.appearence = pygame.image.load("Images/Stage2.png")
         elif self.area == 3:
             self.appearence = pygame.image.load("Images/Stage3.png")
+            
+    def wrldChangeCoolDown(self):
+        if self.changeCoolDown >= 30:
+            self.changeCoolDown = 0
+        elif self.changeCoolDown > 0:
+            self.changeCoolDown += 0.05 * FPS_CAP
