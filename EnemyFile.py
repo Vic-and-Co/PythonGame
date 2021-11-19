@@ -4,6 +4,7 @@ Create classes for enemies here
 #Imports
 from Constants import *
 from PlayerClass import *
+from Data import *
 from threading import Timer
 import random
 
@@ -157,6 +158,8 @@ class MeleeType:
             self.appearence = pygame.image.load("Images/MeleeEnemy3.png")
         elif self.health == 0:
             self.appearence = pygame.image.load("Images/blank.png")
+            if self.subtype == 5:
+                stage1Done = True
 
     def characterHitBoxUpdate(self):
         self.rectX = 39

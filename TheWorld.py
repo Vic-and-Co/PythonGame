@@ -3,6 +3,7 @@ The world class: dictates the stages/ areas
 '''
 import pygame
 from Constants import *
+from Data import *
 
 class World:
     def __init__(self, area):
@@ -17,6 +18,9 @@ class World:
         self.rightSquare = pygame.Rect(690, 255, 30, 209)
         
         self.changeCoolDown = 0
+        
+        #Stage Boss Defeated?
+        self.stage1Done = False
         
     def worldChange(self, playerHitBox, playerX, playerY):
         if pygame.Rect.colliderect(self.upSquare, playerHitBox) and self.area == 0:
@@ -45,6 +49,13 @@ class World:
                 self.area = 0
                 return "right"
             
+    def isStageLock(self):
+        if self.area == 1:
+            if stage1Done():
+                return False
+            else:
+                return True
+        
     def worldImage(self):
         if self.area == 0:
             self.appearence = pygame.image.load("Images/Start Area.png")
