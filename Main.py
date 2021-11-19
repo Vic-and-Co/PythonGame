@@ -36,7 +36,7 @@ redScreen = pygame.image.load("Images/dead.png")
 #Class Instances
 meleeEnemyList = []
 gamer = Player()
-#nongamer = MeleeType(100, 100, 4)
+#nongamer = MeleeType(100, 100, 5)
 
 stage = World(0)
 
@@ -48,8 +48,6 @@ def main():
     
     pygame.display.set_caption(randomName())
     
-    #List append
-    meleeEnemyList.append(MeleeType(100, 100, 1))
     
     while gameRunning:
         #keep at top of gameRunning

@@ -5,6 +5,7 @@ Create classes for enemies here
 from Constants import *
 from PlayerClass import *
 from threading import Timer
+import random
 
 gamer = Player()
 
@@ -19,11 +20,14 @@ class MeleeType:
         self.damageCoolDown = 0
         self.lungeCoolDown = 0
         self.moveCoolDown = 0
+        self.bossMoveCoolDown = 0
         self.subtype = subtype #1 top, 2 right, 3 bottom, 4 left
         
     def movement(self, playerX, playerY):
         self.mvCoolDown(100)
+        self.boMvCoolDown(20)
         timer = Timer(0.3, self.lunge)
+        bossTimer = Timer(0.3, self.lunge)
         if self.subtype == 1 and self.moveCoolDown == 0:
             self.eX = playerX + MELEE1_X_OFFSET
             self.eY = playerY + MELEE1_Y_OFFSET
@@ -47,6 +51,34 @@ class MeleeType:
             self.eY = playerY + MELEE4_Y_OFFSET
             self.moveCoolDown = 1
             timer.start()
+            
+        elif self.subtype == 5 and self.bossMoveCoolDown == 0:
+            self.moveDir = random.randint(1, 4)
+            if self.moveDir == 1:
+                self.eX = playerX + MELEE1_X_OFFSET
+                self.eY = playerY + MELEE1_Y_OFFSET
+                self.bossMoveCoolDown = 1
+                bossTimer.start()
+                
+            elif self.moveDir == 2:
+                self.eX = playerX + MELEE2_X_OFFSET
+                self.eY = playerY + MELEE2_Y_OFFSET
+                self.bossMoveCoolDown = 1
+                bossTimer.start()
+            
+            elif self.moveDir == 3:
+                self.eX = playerX + MELEE3_X_OFFSET
+                self.eY = playerY + MELEE3_Y_OFFSET
+                self.bossMoveCoolDown = 1
+                bossTimer.start()
+            
+            elif self.moveDir == 4:
+                self.eX = playerX + MELEE4_X_OFFSET
+                self.eY = playerY + MELEE4_Y_OFFSET
+                self.bossMoveCoolDown = 1
+                bossTimer.start()
+    
+    
     
     def lunge(self):
         if self.subtype == 1:
@@ -57,6 +89,15 @@ class MeleeType:
            self.eY -= 40
         elif self.subtype == 4:
            self.eX -= 40
+        elif self.subtype == 5:
+            if self.moveDir == 1:
+                self.eY += 40
+            elif self.moveDir == 2:
+                self.eX += 40
+            elif self.moveDir == 3:
+                 self.eY -= 40
+            elif self.moveDir == 4:
+                self.eX -= 40
     
     def isPlayerAttack(self, swordHitZone, playerAttack):
         self.checkHealth()
@@ -83,6 +124,12 @@ class MeleeType:
             self.moveCoolDown = 0
         elif self.moveCoolDown > 0:
             self.moveCoolDown += 0.05 * FPS_CAP
+    
+    def boMvCoolDown(self, cooldown):
+        if self.bossMoveCoolDown >= cooldown:
+            self.bossMoveCoolDown = 0
+        elif self.bossMoveCoolDown > 0:
+            self.bossMoveCoolDown += 0.05 * FPS_CAP
     
     def addHealth(self):
         if (self.health < 3):
