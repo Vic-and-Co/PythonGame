@@ -89,7 +89,7 @@ def main():
         gamer.focusModeOn()
         gamer.drawHealth()
         gamer.allowedBarMovement()
-        #gamer.playerAttack()
+        gamer.playerAttack()
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
         gamer.characterHitBoxDraw()
         

@@ -36,7 +36,7 @@ class World:
             if self.area == 0:
                 self.area = 3
                 return "left"
-            elif self.area == 1:
+            elif self.area == 1 and stage1Done:
                 self.area = 0
                 return "left"
                 
