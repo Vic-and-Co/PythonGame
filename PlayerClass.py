@@ -2,6 +2,7 @@
 This is where we create controls for the player
 """
 #Imports
+from re import A
 import keyboard
 import pygame
 from Constants import *
@@ -21,6 +22,9 @@ class Player:
         self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
         self.damageCoolDown = 0
         self.attackCoolDown = 0
+        
+        self.takingDmg = False
+        self.doDmg = False
         
         #Attack bar
         self.allowedBarY = 180
@@ -83,6 +87,7 @@ class Player:
     def dmgCoolDown(self):
         if self.damageCoolDown >= 30:
             self.damageCoolDown = 0
+            self.takingDmg = False
         elif self.damageCoolDown > 0:
             self.damageCoolDown += 0.05 * FPS_CAP
     
@@ -98,9 +103,16 @@ class Player:
         
     def subHealth(self):
         self.dmgCoolDown()
-        if (self.playerHp > 0 and self.damageCoolDown == 0):
+        if (self.playerHp > 0 and self.damageCoolDown == 0 and self.takingDmg):
             self.playerHp -= 1
             self.damageCoolDown = 1
+    
+    def takeDamage(self, enemHitBox, enemyAlive):
+        if self.takingDmg == True:
+            self.subHealth()
+        if pygame.Rect.colliderect(self.hitbox, enemHitBox) and enemyAlive:
+            self.takingDmg = True
+            #self.subHealth()
     
     def drawHealth(self):
         if (self.playerHp == 3):
@@ -114,6 +126,10 @@ class Player:
             
         elif (self.playerHp == 0):
             self.playerHearts = pygame.image.load("Images/blank.png")
+    
+    def checkDead(self):
+        if self.playerHp < 1:
+            return True
             
     def allowedBarMovement(self):
         if ((self.allowedBarY < 645) and self.allowedBarGoingDown):
@@ -134,13 +150,12 @@ class Player:
         m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
         self.atkCoolDown()
         if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
-            #print(self.attackCoolDown)
             if (m1Press and self.attackCoolDown == 0):
                 self.attackCoolDown = 1
-                self.attackAllowed = True
+                #self.attackAllowed = True
                 return True
         else:
-            self.attackAllowed = False
+            #self.attackAllowed = False
             return False
     
     def meleeSwordDraw(self):

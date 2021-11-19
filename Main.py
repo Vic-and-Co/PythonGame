@@ -7,17 +7,17 @@ import pygame
 import keyboard
 from time import sleep, time
 import random
+from threading import Timer
 
 from PlayerClass import *
 from EnemyFile import *
 from  TheWorld import *
 
+
 #Bruh
 pygame.init()
 
 #Variables
-gamer = Player()
-stage = World(0)
 
 angle = 1
 
@@ -31,6 +31,14 @@ clock = pygame.time.Clock()
 menu = pygame.image.load("Images/menu.png")
 sideScreen = pygame.image.load("Images/sideScreen.png")
 sword = pygame.image.load("Images/sword.png")
+redScreen = pygame.image.load("Images/dead.png")
+
+#Class Instances
+meleeEnemyList = []
+gamer = Player()
+#nongamer = MeleeType(100, 100, 4)
+
+stage = World(0)
 
 
 def main():
@@ -40,25 +48,31 @@ def main():
     
     pygame.display.set_caption(randomName())
     
+    #List append
+    meleeEnemyList.append(MeleeType(100, 100, 1))
+    
     while gameRunning:
         #keep at top of gameRunning
         playerWantClose()
         
-        #Controls
-        gamer.playerMovement()
-        gamer.focusModeOn()
-        #print(pygame.mouse.get_pos())
-        
-        #print(stage.area)
-            
-        #print(stage.area)
-        gamer.subHealth()
-        
         #Meeeenu
         screen.blit(menu, (0, 0))
+    
+        #These need to be at the end of draw since they're at the top
+        if (keyboard.is_pressed('tab') and (stage.area == 0)):
+            screen.blit(menu, (0, 0))
+            menuOpen = True
+        else:
+            menuOpen = False
         
         
-        #Refresh    
+        screen.blit(sideScreen, (0, 0))
+        screen.blit(gamer.playerHearts, (0, 0))
+        
+        pygame.draw.rect(screen,(255, 255, 255), (gamer.attackAllowedBar))
+        #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
+
+        #World
         worldChangeVar = stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
         if worldChangeVar == "bot":
             gamer.playerY = 630
@@ -70,36 +84,46 @@ def main():
             gamer.playerX = 620
         stage.worldImage()
         screen.blit(stage.appearence, (0, 0))
-        
-        #pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
+
+        #Player
+        #print(gamer.damageCoolDown)
+        gamer.playerMovement()
+        gamer.focusModeOn()
+        gamer.drawHealth()
+        gamer.allowedBarMovement()
+        #gamer.playerAttack()
         screen.blit(gamer.appearence, (gamer.playerX, gamer.playerY))
         gamer.characterHitBoxDraw()
+        
         if gamer.attackCoolDown != 0:
             gamer.meleeSwordDraw()
             screen.blit(gamer.swordRotation, (gamer.swordRotsX, gamer.swordRotsY))
+        #pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
         
+        if stage.area == 0:
+            gamer.playerHp = 3
         
-             #These need to be at the end of draw since they're at the top
-        if (keyboard.is_pressed('tab') and (stage.area == 0)):
-            screen.blit(menu, (0, 0))
-            menuOpen = True
-        else:
-            menuOpen = False
-        
-        gamer.drawHealth()
-        screen.blit(sideScreen, (0, 0))
-        screen.blit(gamer.playerHearts, (0, 0))
-        pygame.draw.rect(screen,(255, 255, 255), (gamer.attackAllowedBar))
-        #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
-        gamer.allowedBarMovement()
-        gamer.playerAttack()
-        
-        
+        #Enemy
+        # nongamer.characterHitBoxUpdate()
+        # nongamer.movement(gamer.playerX, gamer.playerY)
+        # nongamer.isPlayerAttack(gamer.swordHitZone, gamer.playerAttack())
+        # screen.blit(nongamer.appearence, (nongamer.eX, nongamer.eY))
+    
+        #Death Check
+        if gamer.checkDead():
+            screen.blit(redScreen, (0, 0))
+            gameRunning = False
+            
+        #Player Class Stuff that takes enemy arg
+        #gamer.takeDamage(nongamer.hitbox, nongamer.isAlive())
         clock.tick(60)
         pygame.event.wait(1)
         pygame.display.update()
         pygame.display.flip()
     
+    while not gameRunning:
+        playerWantClose()
+                                                                                                                                                                                              
 #Other Functions
 def playerWantClose():
     if (keyboard.is_pressed('esc')):
@@ -118,7 +142,7 @@ def randomName():
     elif titleNum == 3:
         return "run, now"
     elif titleNum == 4:
-        return "Sponsered by pain"
+        return "Sponsered by my tears"
     elif titleNum == 5:
         return "The Older Writings"
     elif titleNum == 6:
