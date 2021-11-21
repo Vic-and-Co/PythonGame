@@ -36,8 +36,14 @@ redScreen = pygame.image.load("Images/dead.png")
 #Class Instances
 meleeEnemyList = []
 gamer = Player()
-nongamer = MeleeType(100, 100, 2)
-nongamer.health = 0
+
+#Enemy Classes
+mEnemy1 = MeleeType(100, 100, 0, 1)
+mEnemy2 = MeleeType(100, 100, 0, 2)
+mEnemy3 = MeleeType(100, 100, 0, 3)
+mEnemy4 = MeleeType(100, 100, 0, 4)
+mBoss = MeleeType(100, 100, 0, 5)
+
 
 theWorld = World(0)
 
@@ -72,7 +78,7 @@ def main():
         #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
 
         #World
-        worldChangeVar = theWorld.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        worldChangeVar = theWorld.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY, mBoss.boss1Dead)
         if worldChangeVar == "bot":
             gamer.playerY = 630
         elif worldChangeVar == "top":
@@ -85,7 +91,6 @@ def main():
         screen.blit(theWorld.appearence, (0, 0))
 
         #Player
-        #print(gamer.damageCoolDown)
         gamer.playerMovement()
         gamer.focusModeOn()
         gamer.drawHealth()
@@ -97,24 +102,93 @@ def main():
         if gamer.attackCoolDown != 0:
             gamer.meleeSwordDraw()
             screen.blit(gamer.swordRotation, (gamer.swordRotsX, gamer.swordRotsY))
-        pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
+        if gamer.focusModeOn(): pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws Hit Zone if Shift
         
         if theWorld.area == 0:
             gamer.playerHp = 3
         
         #Enemy Spawning Stage 1
         if (theWorld.worldEnemySpawn()):
-            if not theWorld.stage1EnemiesSpawned:
-                nongamer.health = 3
-                nongamer.eX = 100
-                nongamer.eY = 100
+            if not theWorld.stage1Enemy1Spawned: #Spawn Melee Enemy 1
+                mEnemy1.health = 3
+                mEnemy1.eX = 100
+                mEnemy1.eY = 100
+                
                 if gamer.playerX <= 615:
-                    theWorld.stage1EnemiesSpawned = True
-            nongamer.characterHitBoxUpdate()
-            nongamer.movement(gamer.playerX, gamer.playerY)
-            nongamer.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
-            gamer.takeDamage(nongamer.hitbox, nongamer.isAlive())
-            screen.blit(nongamer.appearence, (nongamer.eX, nongamer.eY))
+                    theWorld.stage1Enemy1Spawned = True
+            
+            if mEnemy1.health == 0: #Spawn Melee Enemy 2
+                mEnemy1.health -= 1
+                
+                theWorld.stage1Enemy2Spawned = True
+                mEnemy2.health = 3
+                mEnemy2.eX = 620
+                mEnemy2.eY = 100
+            
+            if theWorld.stage1Enemy2Spawned and mEnemy2.health == 0: #Spawn Melee Enemy 3
+                mEnemy2.health -= 1
+                
+                theWorld.stage1Enemy3Spawned = True
+                mEnemy3.health = 3
+                mEnemy3.eX = 100
+                mEnemy3.eY = 620
+            
+            if theWorld.stage1Enemy3Spawned and mEnemy3.health == 0: #Spawn Melee Enemy 4
+                mEnemy3.health -= 1
+                
+                theWorld.stage1Enemy4Spawned = True
+                mEnemy4.health = 3
+                mEnemy4.eX = 620
+                mEnemy4.eY = 620
+            
+            if theWorld.stage1Enemy4Spawned and mEnemy4.health == 0: #Spawn Melee Boss
+                mEnemy4.health -= 1
+                
+                theWorld.stage1BossSpawned = True
+                mBoss.health = 3
+                mBoss.eX = 350
+                mBoss.eY = 350
+            
+            if theWorld.stage1BossSpawned and mBoss.health <= 0: #Relays if boss1 dead
+                theWorld.stage1Done = True
+                        
+            mEnemy1.characterHitBoxUpdate()
+            mEnemy1.checkHealth()
+            mEnemy1.movement(gamer.playerX, gamer.playerY)
+            mEnemy1.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+            
+            mEnemy2.characterHitBoxUpdate()
+            mEnemy2.checkHealth()
+            mEnemy2.movement(gamer.playerX, gamer.playerY)
+            mEnemy2.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+        
+            mEnemy3.characterHitBoxUpdate()
+            mEnemy3.checkHealth()
+            mEnemy3.movement(gamer.playerX, gamer.playerY)
+            mEnemy3.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+            
+            mEnemy4.characterHitBoxUpdate()
+            mEnemy4.checkHealth()
+            mEnemy4.movement(gamer.playerX, gamer.playerY)
+            mEnemy4.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+            
+            mBoss.characterHitBoxUpdate()
+            mBoss.checkHealth()
+            mBoss.movement(gamer.playerX, gamer.playerY)
+            mBoss.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+            
+            
+            gamer.takeDamage(mEnemy1.hitbox, mEnemy1.isAlive())
+            gamer.takeDamage(mEnemy2.hitbox, mEnemy2.isAlive())
+            gamer.takeDamage(mEnemy3.hitbox, mEnemy3.isAlive())
+            gamer.takeDamage(mEnemy4.hitbox, mEnemy4.isAlive())
+            gamer.takeDamage(mBoss.hitbox, mBoss.isAlive())
+                
+            screen.blit(mEnemy1.appearence, (mEnemy1.eX, mEnemy1.eY))
+            screen.blit(mEnemy2.appearence, (mEnemy2.eX, mEnemy2.eY))
+            screen.blit(mEnemy3.appearence, (mEnemy3.eX, mEnemy3.eY))
+            screen.blit(mEnemy4.appearence, (mEnemy4.eX, mEnemy4.eY))
+            screen.blit(mBoss.appearence, (mBoss.eX, mBoss.eY))
     
         #Death Check
         if gamer.checkDead():

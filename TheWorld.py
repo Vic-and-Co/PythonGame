@@ -3,7 +3,6 @@ The world class: dictates the stages/ areas
 '''
 import pygame
 from Constants import *
-from Data import *
 
 class World:
     def __init__(self, area):
@@ -20,10 +19,14 @@ class World:
         self.changeCoolDown = 0
         
         #Stage Boss Defeated?
-        self.stage1EnemiesSpawned = False
-        stage1Done = False
+        self.stage1Enemy1Spawned = False
+        self.stage1Enemy2Spawned = False
+        self.stage1Enemy3Spawned = False
+        self.stage1Enemy4Spawned = False
+        self.stage1BossSpawned = False
+        self.stage1Done = False
         
-    def worldChange(self, playerHitBox, playerX, playerY):
+    def worldChange(self, playerHitBox, playerX, playerY, boss1Dead):
         if pygame.Rect.colliderect(self.upSquare, playerHitBox) and self.area == 0:
             self.area = 2
             return "bot"
@@ -39,7 +42,7 @@ class World:
                 return "left"
             
             #Stage 1 
-            elif self.area == 1 and stage1Done:
+            elif self.area == 1 and self.stage1BossSpawned and boss1Dead:
                 self.area = 0
                 return "left"
                 
@@ -54,7 +57,7 @@ class World:
             
     def isStageLock(self):
         if self.area == 1:
-            if stage1Done():
+            if self.stage1Done():
                 return False
             else:
                 return True
@@ -62,10 +65,16 @@ class World:
     def worldImage(self):
         if self.area == 0:
             self.appearence = pygame.image.load("Images/Start Area.png")
+            
         elif self.area == 1:
-            self.appearence = pygame.image.load("Images/Stage1.png")
+            if self.stage1Done:
+                self.appearence = pygame.image.load("Images/Stage1Done.png")
+            else:
+                self.appearence = pygame.image.load("Images/Stage1.png")
+            
         elif self.area == 2:
             self.appearence = pygame.image.load("Images/Stage2.png")
+            
         elif self.area == 3:
             self.appearence = pygame.image.load("Images/Stage3.png")
             
@@ -76,7 +85,7 @@ class World:
             self.changeCoolDown += 0.05 * FPS_CAP
             
     def worldEnemySpawn(self):
-        if self.area == 1 and not stage1Done:
+        if self.area == 1 and not self.stage1Done:
             return True
         else:
             return False

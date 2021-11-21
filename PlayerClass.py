@@ -22,6 +22,7 @@ class Player:
         self.hitbox = pygame.Rect(self.playerX + HITBOX_OFFSET, self.playerY + HITBOX_OFFSET, 13, 13)
         self.damageCoolDown = 0
         self.attackCoolDown = 0
+        self.lungeCoolDown = 0
         
         self.takingDmg = False
         self.doDmg = False
@@ -40,56 +41,86 @@ class Player:
         self.swordY = 0
         
     def playerMovement(self):
-        def moveRight(self):
+        def moveRight():
+            self.lngCoolDown()
             if ((keyboard.is_pressed('right') or keyboard.is_pressed('d')) and self.playerX < 690.5):
                 if (keyboard.is_pressed('shift')):
                     self.playerX += (PLAYER_SPEED * FPS_CAP) / 2
                     
+                elif (keyboard.is_pressed('space') and self.lungeCoolDown == 0):
+                    self.playerX += PLAYER_LUNGE * FPS_CAP
+                    self.lungeCoolDown += 1
+                    
                 else:
                     self.playerX += (PLAYER_SPEED * FPS_CAP)
                 
-        def moveLeft(self):
+        def moveLeft():
+            self.lngCoolDown()
             if ((keyboard.is_pressed('left') or keyboard.is_pressed('a')) and self.playerX > -11):
                 if (keyboard.is_pressed('shift')):
                     self.playerX -= (PLAYER_SPEED * FPS_CAP) / 2
+                
+                elif (keyboard.is_pressed('space') and self.lungeCoolDown == 0):
+                    self.playerX -= PLAYER_LUNGE * FPS_CAP
+                    self.lungeCoolDown += 1
                     
                 else:
                     self.playerX -= PLAYER_SPEED * FPS_CAP      
 
-        def moveUp(self):
+        def moveUp():
+            self.lngCoolDown()
             if ((keyboard.is_pressed('up') or keyboard.is_pressed('w')) and self.playerY > -9):
                 if (keyboard.is_pressed('shift')):
                     self.playerY -= (PLAYER_SPEED * FPS_CAP) / 2
+                
+                elif (keyboard.is_pressed('space') and self.lungeCoolDown == 0):
+                    self.playerY -= PLAYER_LUNGE * FPS_CAP
+                    self.lungeCoolDown += 1
                     
                 else:
                     self.playerY -= PLAYER_SPEED * FPS_CAP
             
-        def moveDown(self):       
+        def moveDown():       
+            self.lngCoolDown()
             if ((keyboard.is_pressed('down') or keyboard.is_pressed('s')) and self.playerY < 690.5):
                 if (keyboard.is_pressed('shift')):
                     self.playerY += (PLAYER_SPEED * FPS_CAP) / 2
+                
+                elif (keyboard.is_pressed('space') and self.lungeCoolDown == 0):
+                    self.playerY += PLAYER_LUNGE * FPS_CAP
+                    self.lungeCoolDown += 1
                     
                 else:
                     self.playerY += PLAYER_SPEED * FPS_CAP
+        
                     
-        moveRight(self)
-        moveLeft(self)
-        moveUp(self)
-        moveDown(self)
+        moveRight()
+        moveLeft()
+        moveUp()
+        moveDown()
         
     def focusModeOn(self):
         if (keyboard.is_pressed('shift')):
             self.appearence = pygame.image.load("Images/characterFocus.png")
+            return True
         else:
             self.appearence = pygame.image.load("Images/character.png")
+            return False
         
         
     def dmgCoolDown(self):
-        if self.damageCoolDown >= 30:
+        if self.damageCoolDown >= 60:
             self.damageCoolDown = 0
             self.takingDmg = False
         elif self.damageCoolDown > 0:
             self.damageCoolDown += 0.05 * FPS_CAP
+            
+    def lngCoolDown(self):
+        if self.lungeCoolDown >= 50:
+            self.lungeCoolDown = 0
+            self.lungeCoolDown = False
+        elif self.lungeCoolDown > 0:
+            self.lungeCoolDown += 0.05 * FPS_CAP
     
     def atkCoolDown(self):
         if self.attackCoolDown >= 30:
@@ -151,7 +182,6 @@ class Player:
         self.atkCoolDown()
         if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
             if (m1Press and self.attackCoolDown <= 0):
-                print("bruh")
                 self.attackCoolDown = 1
                 self.attackAllowed = True
                 return True
