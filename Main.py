@@ -36,9 +36,10 @@ redScreen = pygame.image.load("Images/dead.png")
 #Class Instances
 meleeEnemyList = []
 gamer = Player()
-#nongamer = MeleeType(100, 100, 5)
+nongamer = MeleeType(100, 100, 2)
+nongamer.health = 0
 
-stage = World(0)
+theWorld = World(0)
 
 
 def main():
@@ -57,7 +58,7 @@ def main():
         screen.blit(menu, (0, 0))
     
         #These need to be at the end of draw since they're at the top
-        if (keyboard.is_pressed('tab') and (stage.area == 0)):
+        if (keyboard.is_pressed('tab') and (theWorld.area == 0)):
             screen.blit(menu, (0, 0))
             menuOpen = True
         else:
@@ -71,7 +72,7 @@ def main():
         #pygame.draw.rect(screen,(255, 0, 0), (gamer.attackAllowedZone), 2)
 
         #World
-        worldChangeVar = stage.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
+        worldChangeVar = theWorld.worldChange(gamer.hitbox, gamer.playerX, gamer.playerY)
         if worldChangeVar == "bot":
             gamer.playerY = 630
         elif worldChangeVar == "top":
@@ -80,8 +81,8 @@ def main():
             gamer.playerX = 60
         elif worldChangeVar == "right":
             gamer.playerX = 620
-        stage.worldImage()
-        screen.blit(stage.appearence, (0, 0))
+        theWorld.worldImage()
+        screen.blit(theWorld.appearence, (0, 0))
 
         #Player
         #print(gamer.damageCoolDown)
@@ -96,16 +97,24 @@ def main():
         if gamer.attackCoolDown != 0:
             gamer.meleeSwordDraw()
             screen.blit(gamer.swordRotation, (gamer.swordRotsX, gamer.swordRotsY))
-        #pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
+        pygame.draw.rect(screen, (255, 0 ,0), gamer.swordHitZone, 2) #Draws sword hitzone, unneeded but useful for testing enemy damage range
         
-        if stage.area == 0:
+        if theWorld.area == 0:
             gamer.playerHp = 3
         
-        #Enemy
-        # nongamer.characterHitBoxUpdate()
-        # nongamer.movement(gamer.playerX, gamer.playerY)
-        # nongamer.isPlayerAttack(gamer.swordHitZone, gamer.playerAttack())
-        # screen.blit(nongamer.appearence, (nongamer.eX, nongamer.eY))
+        #Enemy Spawning Stage 1
+        if (theWorld.worldEnemySpawn()):
+            if not theWorld.stage1EnemiesSpawned:
+                nongamer.health = 3
+                nongamer.eX = 100
+                nongamer.eY = 100
+                if gamer.playerX <= 615:
+                    theWorld.stage1EnemiesSpawned = True
+            nongamer.characterHitBoxUpdate()
+            nongamer.movement(gamer.playerX, gamer.playerY)
+            nongamer.isPlayerAttack(gamer.swordHitZone, gamer.attackAllowed)
+            gamer.takeDamage(nongamer.hitbox, nongamer.isAlive())
+            screen.blit(nongamer.appearence, (nongamer.eX, nongamer.eY))
     
         #Death Check
         if gamer.checkDead():
@@ -113,7 +122,6 @@ def main():
             gameRunning = False
             
         #Player Class Stuff that takes enemy arg
-        #gamer.takeDamage(nongamer.hitbox, nongamer.isAlive())
         clock.tick(60)
         pygame.event.wait(1)
         pygame.display.update()

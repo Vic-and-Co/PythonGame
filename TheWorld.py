@@ -20,7 +20,8 @@ class World:
         self.changeCoolDown = 0
         
         #Stage Boss Defeated?
-        self.stage1Done = False
+        self.stage1EnemiesSpawned = False
+        stage1Done = False
         
     def worldChange(self, playerHitBox, playerX, playerY):
         if pygame.Rect.colliderect(self.upSquare, playerHitBox) and self.area == 0:
@@ -36,6 +37,8 @@ class World:
             if self.area == 0:
                 self.area = 3
                 return "left"
+            
+            #Stage 1 
             elif self.area == 1 and stage1Done:
                 self.area = 0
                 return "left"
@@ -71,3 +74,9 @@ class World:
             self.changeCoolDown = 0
         elif self.changeCoolDown > 0:
             self.changeCoolDown += 0.05 * FPS_CAP
+            
+    def worldEnemySpawn(self):
+        if self.area == 1 and not stage1Done:
+            return True
+        else:
+            return False

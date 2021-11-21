@@ -150,13 +150,16 @@ class Player:
         m1Press, mMidPress, m2Press = pygame.mouse.get_pressed()
         self.atkCoolDown()
         if pygame.Rect.colliderect(self.attackAllowedBar, self.attackAllowedZone):
-            if (m1Press and self.attackCoolDown == 0):
+            if (m1Press and self.attackCoolDown <= 0):
+                print("bruh")
                 self.attackCoolDown = 1
-                #self.attackAllowed = True
+                self.attackAllowed = True
                 return True
-        else:
-            #self.attackAllowed = False
-            return False
+            elif self.attackCoolDown >= 1:
+                self.attackAllowed = False
+        # else:
+        #     self.attackAllowed = False
+        #     return False
     
     def meleeSwordDraw(self):
         self.swordX, self.swordY = self.playerX + SWORD_OFFSET_X, self.playerY + SWORD_OFFSET_Y
@@ -172,4 +175,4 @@ class Player:
         
         #Sword HitZone Draw
         self.appearence = pygame.image.load("Images/character.png")
-        self.swordHitZone = pygame.Rect(self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 80, 80)
+        self.swordHitZone = pygame.Rect(self.playerX + SWORD_HB_OFFSET, self.playerY + SWORD_HB_OFFSET, 90, 90)

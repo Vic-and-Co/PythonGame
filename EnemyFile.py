@@ -79,8 +79,6 @@ class MeleeType:
                 self.bossMoveCoolDown = 1
                 bossTimer.start()
     
-    
-    
     def lunge(self):
         if self.subtype == 1:
            self.eY += 40
@@ -140,15 +138,10 @@ class MeleeType:
         self.dmgCoolDown()
         self.checkHealth()
         self.health -= 1
-        
-        # if (self.health > 0 and self.damageCoolDown == 0):
-        #     self.health -= 1
-        #     self.damageCoolDown = 1
     
     def isAlive(self):
         return self.health > 0
             
-    
     def checkHealth(self):
         if self.health == 3:
             self.appearence = pygame.image.load("Images/MeleeEnemy.png")
