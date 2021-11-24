@@ -1,9 +1,0 @@
-So like we're gonna make it so you can unlock three attacks total (four if theres time) that unlocks based on the boss you beat up
-supers can also be unlocked, but only one can be selected at a time:
-
-Melee (You start with this):
-    Normal: sword hit; attacks once in a direction per mouse click
-    Super: sword tornado thingy; summons a circle of swords that does damage all around you for set amount of time
-
-    361 - 496 hit zone
-    751, 180 square hit marker
