@@ -1,7 +1,7 @@
 # PythonGame
  
 run:
-pip install keyboard
+pip install keyboard;
 pip install pygame
 
 # RUN RunGame.py TO RUN THE GAME
